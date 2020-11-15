@@ -6,7 +6,6 @@ public class SumValue {
 	int max = 100;
 	for(int i = 0; i < arr.length; i++) {
 	    arr[i] = (int)(Math.random() * (max - min + 1) + min);
-	    //arr[i] = 2;
        	}
     }
     /*get sum of an array using 4 threads*/
@@ -27,7 +26,7 @@ public class SumValue {
     }
 
     public static void main(String[] args) throws Exception {
-	int[] arr = new int[40];
+	int[] arr = new int[40000];
 	generateRandomArray(arr);
 	long sum = sum(arr);
 	System.out.println("Sum: " + sum);
