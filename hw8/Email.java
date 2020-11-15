@@ -1,7 +1,7 @@
-//package emailapp;
+package emailapp;
 
 import java.util.Scanner;
-import java.io.*;
+
 
 public class Email {
 
