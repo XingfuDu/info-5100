@@ -1,10 +1,10 @@
 import java.util.Arrays;
-public class maxValue {
+public class maxValue2 {
 
     /*generate array of random numbers*/
     static void generateRandomArray(int[] arr){
 	int min = 0;
-	int max = 10000000;
+	int max = 100000;
 	for(int i = 0; i < arr.length; i++) {
 	    arr[i] = (int)(Math.random() * (max - min + 1) + min);
 	    //System.out.print(arr[i] + " ");
@@ -15,35 +15,34 @@ public class maxValue {
     static int max(int[] arr) throws Exception {
 	maxThread[] s = new maxThread[4];
 	for (int i = 0; i < 4; i++) {
-	    int len = arr.length / 4;
+	    int len = arr.length / 4; 
 	    s[i] = new maxThread(arr, i * len, i * len + len);
 	    s[i].start();
 	    s[i].join();
 	}
-	int max = Integer.MIN_VALUE;
-        for (int i = 0; i < 4; i++) {
-	    if (max < s[i].getMax()) {
-		max = s[i].getMax();
-	    }
-	}
+       
+	int max = maxThread.getMax();
 
 	return max;
     }
 
     public static void main(String[] args) throws Exception {
-	int[] arr = new int[40000];
+	int[] arr = new int[400];
 	generateRandomArray(arr);
 	int max = max(arr);
 	System.out.println("Max: " + max);
-        Arrays.sort(arr);
-        System.out.println("Max by sort: " + arr[arr.length - 1]);
+	Arrays.sort(arr);
+	System.out.println("Max by sort: " + arr[arr.length - 1]);
     }
 }
 
+
 class maxThread extends Thread {
     private int[] arr;
-    private int max;
-    private int start, end;
+    private int start;
+    private int end;
+    private static int max = Integer.MIN_VALUE;
+    private final Object lock = new Object();
 
     maxThread(int[] arr, int start, int end) {
 	this.arr = arr;
@@ -52,19 +51,22 @@ class maxThread extends Thread {
     }
 
     private void max() {
-	max = Integer.MIN_VALUE;
 	for(int i = start; i < end; i++) {
-	    if (arr[i] > max) {
-		max = arr[i];
+	    synchronized(lock) {
+		if (arr[i] > max) {
+		    max = arr[i];
+		}
 	    }
 	}
     }
     
+    @Override
     public void run() {
 	this.max();  
     }
     
-    public int getMax() {
+    public static int getMax() {
 	return max;
     }
+    
 }
